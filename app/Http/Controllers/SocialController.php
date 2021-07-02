@@ -41,12 +41,12 @@ class SocialController extends Controller
                 'profile_photo_path'    => $getInfo->avatar,
                 'password'=>Hash::make(rand(0,9999999))
             ]);
-            // $detail =[
-            //     'title'=>'Chào mừng bạn đến với Q',
-            //     'body'=>'Chao mung!'
-            // ];
+            $detail =[
+                'title'=>'Chào mừng bạn đến với Q',
+                'body'=>'Chao mung!'
+            ];
             $user->forceFill(['email_verified_at' => Date::now(),'profile_photo_path'    => $getInfo->avatar,])->save();
-            // Mail::to($getInfo->email)->send(new NewMail($detail));
+            Mail::to($getInfo->email)->send(new NewMail($detail));
         }
         return $user;
     }
