@@ -27,7 +27,12 @@ Route::get('/callback/{provider}', [SocialController::class, 'callback']);
 
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::resource('/messages', MessagesController::class)->only([
-        'index', 'show','store'
-    ]);
+    // Route::resource('/messages', MessagesController::class)->only([
+    //     'index', 'show','store'
+    // ]);
+    //SOCKET IO (node serversk)
+    Route::get('/messages', [MessagesController::class, 'index_room']);
+    Route::get('messages/{id}', [MessagesController::class, 'show_room']);
+
+
 });

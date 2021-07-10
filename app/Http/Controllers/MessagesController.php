@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class MessagesController extends Controller
 {
 
-    public function index()
+    public function index_room()
     {
         return View('profile.messages');
     }
@@ -17,7 +17,7 @@ class MessagesController extends Controller
         dd(true);
     }
 
-    public function show($id)
+    public function show_room($id)
     {
         return View('profile.messages-chat',['id_chat'=>$id]);
     }
