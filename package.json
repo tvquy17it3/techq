@@ -19,5 +19,9 @@
         "postcss": "^8.1.14",
         "postcss-import": "^14.0.1",
         "tailwindcss": "^2.2.2"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^4.1.2"
     }
 }

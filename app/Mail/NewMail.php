@@ -30,6 +30,6 @@ class NewMail extends Mailable
     public function build()
     {
         
-        return $this->subject('Techq')->view('newmail');
+        return $this->subject('Chào mừng bạn đến với Techq')->view('newmail');
     }
 }

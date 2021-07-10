@@ -12,6 +12,7 @@ use App\DripEmailer;
 use App\Mail\NewMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\URL;
 
 class SocialController extends Controller
 {
@@ -38,14 +39,16 @@ class SocialController extends Controller
                 'email'    => $getInfo->email,
                 'provider_name' => $provider,
                 'provider_id' => $getInfo->id,
-                'profile_photo_path'    => $getInfo->avatar,
+                
                 'password'=>Hash::make(rand(0,9999999))
             ]);
+            // 'profile_photo_path'    => $getInfo->avatar,
             $detail =[
-                'title'=>'Chào mừng bạn đến với Q',
-                'body'=>'Chao mung!'
+                'title'=>'Chào mừng bạn đến với TECHQ',
+                'body'=>'Hãy đón nhận nhiều điều mới đang chờ bạn!',
+                'url'=> URL::to('')
             ];
-            $user->forceFill(['email_verified_at' => Date::now(),'profile_photo_path'    => $getInfo->avatar,])->save();
+            $user->markEmailAsVerified();
             Mail::to($getInfo->email)->send(new NewMail($detail));
         }
         return $user;

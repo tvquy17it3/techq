@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialController;
+use App\Http\Controllers\MessagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +22,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('/auth/redirect/{provider}', [\App\Http\Controllers\SocialController::class, 'redirect'])->name('login.provider');
-Route::get('/callback/{provider}', [\App\Http\Controllers\SocialController::class, 'callback']);
+Route::get('/auth/redirect/{provider}', [SocialController::class, 'redirect'])->name('login.provider');
+Route::get('/callback/{provider}', [SocialController::class, 'callback']);
+
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('/messages', MessagesController::class)->only([
+        'index', 'show','store'
+    ]);
+});

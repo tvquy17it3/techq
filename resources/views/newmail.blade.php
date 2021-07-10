@@ -143,7 +143,7 @@
 
 <body width="100%" bgcolor="#F1F1F1" style="margin: 0; mso-line-height-rule: exactly;">
     <center style="width: 100%; background: #F1F1F1; text-align: left;">
-        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;"> (Optional) This text will appear in the inbox preview, but not the email body. </div>
+        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;"></div>
         <div style="max-width: 680px; margin: auto;" class="email-container">
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;" class="email-container">
                 <tr>
@@ -171,7 +171,7 @@
                                                     <center>
                                                         <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0" class="center-on-narrow" style="text-align: center;">
                                                             <tr>
-                                                                <td style="border-radius: 50px; background: #26a4d3; text-align: center;" class="button-td"> <a href="http://127.0.0.1:8000/user/profile" style="background: #26a4d3; border: 15px solid #26a4d3; font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 50px; font-weight: bold;" class="button-a"> <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;ACCESS ACCOUNT&nbsp;&nbsp;&nbsp;&nbsp;</span> </a> </td>
+                                                                <td style="border-radius: 50px; background: #26a4d3; text-align: center;" class="button-td"> <a href="{{$detail['url']}}" style="background: #26a4d3; border: 15px solid #26a4d3; font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 50px; font-weight: bold;" class="button-a"> <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Truy cập Website!&nbsp;&nbsp;&nbsp;&nbsp;</span> </a> </td>
                                                             </tr>
                                                         </table>
                                                     </center>
