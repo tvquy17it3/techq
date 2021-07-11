@@ -60,4 +60,34 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
+    }
+
+    public function hasAccess(array $permissions)
+    {
+        // check if the permission is available in any role
+        foreach($this->roles as $role){
+            if ($role->hasAccess($permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function inRole(string $roleSlug)
+    {
+        return $this->roles()->where('slug', $roleSlug)->count() == 1;
+    }
+
+    public function isSuperAdmin()
+    {
+       return $this->roles()->where('slug', 'admin')->count() == 1;
+    }
+
 }
+// https://topdev.vn/blog/phan-quyen-nguoi-dung-voi-laravel-authorization/
+//Model User có quan hệ nhiều – nhiều với model Role thông qua bảng role_users

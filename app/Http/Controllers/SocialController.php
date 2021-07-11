@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator,Redirect,Response,File;
 use Socialite;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 use App\DripEmailer;
@@ -49,6 +50,8 @@ class SocialController extends Controller
                 'url'=> URL::to('')
             ];
             $user->markEmailAsVerified();
+            $author = Role::where('slug', 'author')->first();
+            $user->roles()->attach($author);
             Mail::to($getInfo->email)->send(new NewMail($detail));
         }
         return $user;
