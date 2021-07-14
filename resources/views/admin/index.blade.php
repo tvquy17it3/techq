@@ -46,10 +46,9 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Provider</th>
-                                            <th>Role</th>
                                             <th>Created_at</th>
                                             <th>Updated_at</th>
-                                            <th>Block</th>
+                                            <th>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,16 +59,15 @@
                                             <td>{{$values->email}}</td>
                                             <td>{{$values->phone}}</td>
                                             <td>{{$values->provider}}</td>
-                                            <td>
-                                                <p id="myText{{$values->id}}">{{$values->role}}</p>
-                                            </td>
                                             <td>{{$values->created_at}}</td>
                                             <td>{{$values->updated_at}}</td>
+                                            <td>{{$values->slug}}
+                                                {{print_r($values->role)}}
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- <input type="text" id="myText" value="Mickey"> -->
                             </div>
                         </div>
                     </div>
@@ -86,6 +84,3 @@
 <script type="text/javascript" src="ad\js\dash\dashboad.js"> </script>
 
 @endsection
-
-<!-- 
-SELECT `id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `image`, `provider`, `provider_id`, `role`, `remember_token`, `created_at`, `updated_at' -->

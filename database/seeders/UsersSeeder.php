@@ -32,6 +32,7 @@ class UsersSeeder extends Seeder
         $editor1= User::create([
             'name' => 'Van Quy', 
             'email' => 'tranvanquy221198@gmail.com',
+            'email_verified_at' => now(),
             'password' => bcrypt('1234567890'),
             'remember_token' => Str::random(10)
         ]);
@@ -41,6 +42,7 @@ class UsersSeeder extends Seeder
         $auth1 = User::create([
             'name' => 'Tran Van Quy', 
             'email' => 'tvquy.17it3@vku.udn.vn',
+            'email_verified_at' => now(),
             'password' => bcrypt('1234567890'),
             'remember_token' => Str::random(10),
         ]);

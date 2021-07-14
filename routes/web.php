@@ -16,7 +16,8 @@ use App\Http\Controllers\AdminController;
 | contains the "web" middleware group. Now create something great!
 | php artisan db:seed --class=UserSeeder
 | php artisan migrate:refresh --path=database/migrations/2021_07_11_090609_create_posts_table.php / delete all records only post
-| php artisan migrate:reset drop all table, artisan migrate:refresh delete records all table
+| php artisan migrate:reset drop all table,php artisan migrate:refresh delete records all table
+| php artisan db:seed --class=UserSeeder
 */
 
 Route::get('/', function () {

@@ -23,9 +23,10 @@ class RolesSeeder extends Seeder
         ]);
         
         $editor = Role::create([
-            'name' => 'Biên tập viên', 
+            'name' => 'Kiểm duyệt', 
             'slug' => 'editor',
             'permissions' => [
+                'post.create' => true,
                 'post.update' => true,
                 'post.publish' => true,
             ]
