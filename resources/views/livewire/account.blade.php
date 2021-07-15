@@ -1,14 +1,4 @@
-@extends('layouts.admin')
-@section('title', 'Accounts')
-@section('css')
-<link href="ad\css\dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="ad\css\toastr.css" rel="stylesheet" />
-<link href="ad\css\customad.css" rel="stylesheet" />
-<meta name="csrf_token" content="{{ csrf_token() }}" />
-@endsection
-@section('content')
-<!-- page content -->
-<div class="content">
+<div>
     <div class="page-title">
         <div class="title_left">
             <h3>Manage<small> User</small></h3>
@@ -16,7 +6,7 @@
         <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
+                    <input class="form-control" wire:model="search" type="text" placeholder="Search users..." />
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">Go!</button>
                     </span>
@@ -30,7 +20,8 @@
             <div class="x_panel">
                 <div class="x_title">
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -47,7 +38,6 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Provider</th>
-                                            <th>Created_at</th>
                                             <th>Updated_at</th>
                                             <th>Role</th>
                                             <th>Actions</th>
@@ -62,16 +52,18 @@
                                             <td>{{$values->phone}}</td>
                                             <td>{{$values->provider_name}}</td>
                                             <td>{{$values->created_at}}</td>
-                                            <td>{{$values->updated_at}}</td>
-                                            <td>{{$values->slug}}(
-                                                @foreach ($values->role as $key => $role)
-                                                    {{$key.", "}}
+                                            <td>
+                                                @foreach ($values->roles as $roles)
+                                                {{$roles->slug}}(
+                                                @foreach ($roles->permissions as $key => $role)
+                                                {{$key.", "}}
                                                 @endforeach
-                                            )
+                                                )
+                                                @endforeach
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-primary">Edit</button>
-                                                <button type="button" class="btn btn-danger">Block</button>
+                                                <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                <button type="button"  wire:click.prevent="confirmUserRemoved({{ $values->id }})" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -81,15 +73,29 @@
                         </div>
                     </div>
                 </div>
+                <div style="float: right;">
+                    {!! $users->links() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                   <h2>Xoá tài khoản</h2> 
+                </div>
+                <div class="modal-body">
+                    <p>You are about to delete <b><i class="title"></i></b> record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed? <i class="dataid"></i></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" wire:click.prevent="deleteUser" class="btn btn-danger">Delete</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-@endsection
-@section('scripts')
-<script src="ad/js/jquery.dataTables.min.js"></script>
-<script src="ad/js/dataTables.bootstrap.min.js"></script>
-<script src="ad/js/toastr.js"></script>
-<script type="text/javascript" src="ad/js/dash/dashboad.js"> </script>
-@endsection
+<!-- https://www.nicesnippets.com/blog/laravel-livewire-crud-with-bootstrap-modal-example -->

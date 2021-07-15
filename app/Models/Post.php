@@ -12,14 +12,14 @@ class Post extends Model
         'title', 'slug', 'body', 'user_id','thumbnail'
     ];
 
-    public function owner()
+    public function author()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 
     public function categories()
     {
-        return $this->belongsTo(Category::class,'id','category_id');
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     public function scopePublished($query)

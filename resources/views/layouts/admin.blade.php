@@ -20,6 +20,7 @@
     <!-- Custom Theme Style -->
     <link href="ad/custom.min.css" rel="stylesheet">
     @yield('css')
+    @livewireStyles
   </head>
 
   <body class="nav-md">
@@ -59,14 +60,14 @@
                       <li><a href="index3.html">Dashboard3</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i>Bài viết<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">General Form</a></li>
-                      <li><a href="form_advanced.html">Advanced Components</a></li>
-                      <li><a href="form_validation.html">Form Validation</a></li>
-                      <li><a href="form_wizards.html">Form Wizard</a></li>
-                      <li><a href="form_upload.html">Form Upload</a></li>
-                      <li><a href="form_buttons.html">Form Buttons</a></li>
+                      <li><a href="admintp/news">Mới nhất</a></li>
+                      <li><a href="admintp/chua-duyet">Bài chưa duyệt</a></li>
+                      <li><a href="admintp/da-duyet">Đã duyệt</a></li>
+                      <li><a href="admintp/bao-cao">Báo cáo</a></li>
+                      <li><a href="admintp/da-xoa">Đã xoá</a></a></li>
+                      <li><a href="admintp/quang-cao">Quảng cáo</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
@@ -86,7 +87,7 @@
                   </li>
                   <li><a><i class="fa fa-clone"></i>Account <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="admintp/account">All users</a></li>
+                      <li><a href="admintp/all-accounts">All users</a></li>
                       <li><a href="admintp/blocked">Blocks</a></li>
                     </ul>
                   </li>
@@ -175,9 +176,6 @@
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out
                     </a>
-                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                     @csrf
-                     </form>
                     </div>
                   </li>
   
@@ -281,5 +279,6 @@
     <!-- Custom Theme Scripts -->
     <script src="ad/js/custom.min.js"></script>
     @yield('scripts')
+    @livewireScripts
   </body>
 </html>

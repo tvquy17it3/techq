@@ -32,15 +32,21 @@ class SocialController extends Controller
     
     }
     function createUser($getInfo,$provider){
-        $user = User::where('provider_id', $getInfo->id)->first();
+        $user = User::where('email', $getInfo->email)->first();
         
-        if (!$user) {
+        if ($user) {
+            if ($user->provider_id==null) {
+                $user->provider_name=$provider;
+                $user->provider_id=$getInfo->id;
+                $user->save();
+                return $user;
+            }
+        }else {
             $user = User::create([
                 'name'     => $getInfo->name,
                 'email'    => $getInfo->email,
                 'provider_name' => $provider,
                 'provider_id' => $getInfo->id,
-                
                 'password'=>Hash::make(rand(0,9999999))
             ]);
             // 'profile_photo_path'    => $getInfo->avatar,
@@ -54,6 +60,7 @@ class SocialController extends Controller
             $user->roles()->attach($author);
             Mail::to($getInfo->email)->send(new NewMail($detail));
         }
+
         return $user;
     }
 }
