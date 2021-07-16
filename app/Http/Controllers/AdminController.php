@@ -28,21 +28,17 @@ class AdminController extends Controller
 
     public function all_account()
     {
-        // $users =  User::whereHas('roles', function($q){
-        //     $q->whereNotIn('slug', ['admin']);
-            
-        // })->simplePaginate(2);return view('admin.accounts',['userss' => $users]);
-        return view('admin.accounts');
+        return view('admin.accounts',['typeAccount'=>'all-accounts']);
     }
 
     public function blocked()
     {
-        dd(true);
+        return view('admin.accounts',['typeAccount'=>'blocked']);
     }
 
     public function chua_duyet()
     {
-        $posts = Post::unpublished()->simplePaginate(2);
-        return view('admin.post-unpublished',['posts' => $posts]);
+        // $posts = Post::unpublished()->simplePaginate(2);,['posts' => $posts]
+        return view('admin.post-unpublished');
     }
 }

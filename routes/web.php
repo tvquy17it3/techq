@@ -14,7 +14,6 @@ use App\Http\Controllers\AdminController;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
-| php artisan db:seed --class=UserSeeder
 | php artisan migrate:refresh --path=database/migrations/2021_07_11_090609_create_posts_table.php / delete all records only post
 | php artisan migrate:reset drop all table,php artisan migrate:refresh delete records all table
 | php artisan db:seed --class=UserSeeder
@@ -68,6 +67,8 @@ Route::get('/posts', [PostController::class, 'index'])->name('list_posts');
 Route::get('/p/{slug}', [PostController::class,'find_slug'])->name('slug_post');
 Route::get('/show/{id}', [PostController::class,'show'])->name('show_post');
 Route::get('/count', [App\Http\Livewire\Counter::class,'render']);
-Route::get('/users', function () {
-    return view('livewire.list-user');
+Route::get('/test', function () {
+    dd(true);
+    // return view('livewire.list-user');
 });
+

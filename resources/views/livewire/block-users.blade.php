@@ -65,7 +65,8 @@
                                                 <td>{{$values->created_at}}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                    <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                    <button type="button" wire:click.prevent="confirmUserRestore({{ $values->id}},'{{$values->email }}')" class="btn btn-warning btn-sm"><i class="fa fa-reply-all" aria-hidden="true"></i></button>
+                                                    <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -82,19 +83,37 @@
         </div>
     </div>
 
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirm-restore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Khoá tài khoản</h2>
+                    <h2>Khôi phục tài khoản</h2>
                 </div>
                 <div class="modal-body">
-                    <p>Xác nhận khoá tài khoản: <b><i class="title">{{ $this->email}}</i></b>, tài khoản sẽ bị ẩn, bạn vẫn có thể khôi phục lại.</p>
+                    <p>Xác nhận khôi phục tài khoản: <b><i class="title">{{ $this->email}}</i></b></p>
                     <p>Bạn có muốn tiếp tục! <i class="dataid"></i></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" wire:click.prevent="deleteUser" class="btn btn-danger">Block</button>
+                    <button type="button" wire:click.prevent="restore" class="btn btn-warning">Restore</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Xoá tài khoản</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Xác nhận xoá tài khoản: <b><i class="title">{{ $this->email}}</i></b>, Mọi bài viết của tài khoản này cũng sẽ bị xoá.</p>
+                    <p>Bạn có muốn tiếp tục! <i class="dataid"></i></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" wire:click.prevent="deleteUser" class="btn btn-danger">Delete</button>
                 </div>
             </div>
         </div>

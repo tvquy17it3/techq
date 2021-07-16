@@ -9,9 +9,15 @@
 @section('content')
 <!-- page content -->
 <div class="content">
-    @livewire('account')
-</div>
+    @if ($typeAccount=='all-accounts')
+        @livewire('account')
+    @endif
 
+    @if ($typeAccount=='blocked')
+        @livewire('blocked')
+    @endif
+    
+</div>
 
 @endsection
 @section('scripts')
@@ -26,6 +32,15 @@
 
     window.addEventListener('hide-delete-modal', event=>{
         $('#confirm-delete').modal('hide');
+        toastr.success(event.detail.message,'Success!!');
+    })
+
+    window.addEventListener('show-restore-modal', event=>{
+        $('#confirm-restore').modal('show');
+    })
+
+    window.addEventListener('hide-restore-modal', event=>{
+        $('#confirm-restore').modal('hide');
         toastr.success(event.detail.message,'Success!!');
     })
 </script>
