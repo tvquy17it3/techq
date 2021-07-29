@@ -43,5 +43,15 @@
         $('#confirm-restore').modal('hide');
         toastr.success(event.detail.message,'Success!!');
     })
+
+    window.addEventListener('show-edit-modal', event=>{
+        $('#show-edit-modal').modal('show');
+    })
+
+    window.addEventListener('hide-edit-modal', event=>{
+        $('#show-edit-modal').modal('hide');
+        toastr.success(event.detail.message,'Success!!');
+    })
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 @endsection

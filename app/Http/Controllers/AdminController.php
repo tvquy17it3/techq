@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 class AdminController extends Controller
 {
     public function index()
@@ -40,5 +41,13 @@ class AdminController extends Controller
     {
         // $posts = Post::unpublished()->simplePaginate(2);,['posts' => $posts]
         return view('admin.post-unpublished');
+    }
+
+    public function testGate()
+    {
+        if(Gate::allows('is_admin')){
+            dd(Auth::user()->name);
+        }
+        abort(403);
     }
 }

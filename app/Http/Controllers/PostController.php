@@ -17,7 +17,6 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::published()->paginate();
-        // dd($posts);
         return view('posts.index', compact('posts'));
     }
 
@@ -43,7 +42,6 @@ class PostController extends Controller
         $data['slug'] = Str::slug($data['title']);
         $data['user_id'] = Auth::user()->id;
         $post = Post::create($data);
-        //check slug error
         return redirect()->route('edit_post', $post->id)->with('success', 'Tạo bài viết thành công!');
     }
 
@@ -77,15 +75,10 @@ class PostController extends Controller
     public function drafts()
     {
         $postsQuery = Post::unpublished();
-        // dd(Gate::denies('post.draft'));
         if(Gate::denies('post.draft')) {
-            if (Auth::user()->inRole('admin')) {
-                return view('posts.drafts', ['posts'=>$postsQuery->paginate(10)]);
-            }
             $postsQuery = $postsQuery->where('user_id', Auth::user()->id);
         }
         $posts = $postsQuery->paginate(10);
         return view('posts.drafts', compact('posts'));
     }
-
 }

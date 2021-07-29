@@ -18,7 +18,7 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(App\Models\User::class, 'role_users');
+        return $this->belongsToMany(App\Models\User::class, 'role_users')->withTimestamps();
     }
     
     public function hasAccess(array $permissions) : bool
@@ -32,6 +32,7 @@ class Role extends Model
 
     private function hasPermission(string $permission) : bool
     {
+        dd($permission);
         return $this->permissions[$permission] ?? false;
     }
 }

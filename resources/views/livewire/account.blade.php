@@ -45,29 +45,29 @@
                                     </thead>
                                     <tbody>
                                         @foreach($users as $values)
-                                            <tr>
-                                                <td>{{$values->id}}</td>
-                                                <td>{{$values->name}}</td>
-                                                <td>{{$values->email}}</td>
-                                                <td>{{$values->phone}}</td>
-                                                <td>
+                                        <tr>
+                                            <td>{{$values->id}}</td>
+                                            <td>{{$values->name}}</td>
+                                            <td>{{$values->email}}</td>
+                                            <td>{{$values->phone}}</td>
+                                            <td>
                                                 @if (!$values->roles->isEmpty())
-                                                    @foreach ($values->roles as $roles)
-                                                        {{$roles->slug}}(
-                                                            @foreach ($roles->permissions as $key => $role)
-                                                                {{$key.", "}}
-                                                            @endforeach
-                                                        )
-                                                    @endforeach
+                                                @foreach ($values->roles as $roles)
+                                                {{$roles->slug}}(
+                                                @foreach ($roles->permissions as $key => $role)
+                                                {{$key.", "}}
+                                                @endforeach
+                                                )
+                                                @endforeach
                                                 @endif
-                                                </td>
-                                                <td>{{$values->email_verified_at}}</td>
-                                                <td>{{$values->created_at}}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                    <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                            <td>{{$values->email_verified_at}}</td>
+                                            <td>{{$values->created_at}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            </td>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -95,6 +95,31 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="button" wire:click.prevent="deleteUser" class="btn btn-danger">Block</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="show-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Account</h2>
+                </div>
+                <div class="modal-body">
+                    <select wire:model="selection" name="p" id="p" class="p" multiple>
+                        @foreach($this->roles as $role)
+                            <option value="{{$role->id}}">{{ $role->name }} (
+                                @foreach ($role->permissions as $key => $pms)
+                                    {{$key.", "}}
+                                @endforeach
+                            )</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" wire:click.prevent="confirmEdit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

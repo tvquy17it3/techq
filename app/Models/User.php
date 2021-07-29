@@ -71,11 +71,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_users');
+        return $this->belongsToMany(Role::class, 'role_users')->withTimestamps();
     }
 
     public function hasAccess(array $permissions)
     {
+        dd($permissions);
         // check if the permission is available in any role
         foreach($this->roles as $role){
             if ($role->hasAccess($permissions)) {

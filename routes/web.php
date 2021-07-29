@@ -21,6 +21,7 @@ use App\Http\Controllers\AdminController;
 | return $user->append('is_admin')->toArray();
 |Session::flash('success', 'Bạn tạo bài post thành công');
 |https://viblo.asia/p/tim-hieu-eloquent-trong-laravel-phan-1-eloquent-model-database-QpmleBAo5rd
+| https://www.youtube.com/watch?v=wwGjcKXaG-I  selectRows
 */
 
 Route::get('/', function () {
@@ -72,3 +73,4 @@ Route::get('/test', function () {
     // return view('livewire.list-user');
 });
 
+Route::get('/admin', [AdminController::class,'testGate']);
