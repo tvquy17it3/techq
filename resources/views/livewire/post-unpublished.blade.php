@@ -1,5 +1,5 @@
 <div>
-<div class="page-title">
+    <div class="page-title">
         <div class="title_left">
             <h3>Bài đăng chưa được duyệt!<small></small></h3>
         </div>
@@ -45,39 +45,45 @@
                                         <tr>
                                             <td>{{$values->id}}</td>
                                             <td>{{$values->title}}</td>
-                                            <td>{{$values->author->name ." | ". $values->author->email}}</td>
+                                            <td>
+                                                @if(!is_null($values->author))
+                                                    {{$values->author->name ." | ". $values->author->email}}
+                                                @endif
+
+                                                
+                                            </td>
                                             <td>{{$values->categories->name}}</td> 
                                             <td>{{$values->created_at}}</td>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                <button type="button" wire:click.prevent="confirmPostRemoved({{ $values->id}},'{{$values->title }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <button type="button" wire:click.prevent="confirmPostRemoved({{ $values->id}},'{{$values->title }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div style="float: right;">
-                    {!! $posts->links() !!}
-                </div>
+            </div>
+            <div style="float: right;">
+                {!! $posts->links() !!}
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 Xoá bài viết
             </div>
-                <div class="modal-body">
-                    <p>Bạn muốn xoá bài viết: <b><i class="title">{{$title}}</i></b>, bài viết sẽ không được phục hồi</p>
-                    <p>Bạn có muốn tiếp tục! <i class="dataid"></i></p>
-                </div>
+            <div class="modal-body">
+                <p>Bạn muốn xoá bài viết: <b><i class="title">{{$title}}</i></b>, bài viết sẽ không được phục hồi</p>
+                <p>Bạn có muốn tiếp tục! <i class="dataid"></i></p>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" wire:click.prevent="deletePost" class="btn btn-danger">Delete</button>

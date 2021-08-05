@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Storage;
+use File;
+
 class AdminController extends Controller
 {
     public function index()
@@ -37,11 +40,7 @@ class AdminController extends Controller
         return view('admin.accounts',['typeAccount'=>'blocked']);
     }
 
-    public function chua_duyet()
-    {
-        // $posts = Post::unpublished()->simplePaginate(2);,['posts' => $posts]
-        return view('admin.post-unpublished');
-    }
+    
 
     public function testGate()
     {
@@ -49,5 +48,34 @@ class AdminController extends Controller
             dd(Auth::user()->name);
         }
         abort(403);
+    }
+
+    public function analyticUser()
+    {
+
+       return view('admin.analytic-users');
+    }
+
+    public function testUpload()
+    {
+        $disk = Storage::disk('google');
+        $exists = $disk->exists('test.txt');
+        dd($exists);
+        if ($exists) {
+            echo "Exits";
+        }else{
+            $disk->put('test.txt','tran van quy 17it3');
+            dd('true');
+        }
+        
+    }
+
+    public function list()
+    {
+        $dir = "/";
+        $rec = false;
+        $contents = collect(Storage::disk('google')->listContents($dir,$rec));
+        return $contents;
+
     }
 }

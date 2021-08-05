@@ -9,12 +9,12 @@ class Post extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'slug', 'body', 'user_id','thumbnail'
+        'title', 'slug', 'body', 'user_id','thumbnail','category_id'
     ];
 
     public function author()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class,'user_id')->withTrashed();
     }
 
     public function categories()

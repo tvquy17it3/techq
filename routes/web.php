@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ use App\Http\Controllers\AdminController;
 |Session::flash('success', 'Bạn tạo bài post thành công');
 |https://viblo.asia/p/tim-hieu-eloquent-trong-laravel-phan-1-eloquent-model-database-QpmleBAo5rd
 | https://www.youtube.com/watch?v=wwGjcKXaG-I  selectRows
+
+| https://www.youtube.com/watch?v=IYlf58kxsQg gg drive
 */
 
 Route::get('/', function () {
@@ -35,25 +38,45 @@ Route::get('/auth/redirect/{provider}', [SocialController::class, 'redirect'])->
 Route::get('/callback/{provider}', [SocialController::class, 'callback']);
 
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => ['web', 'auth']], function() {
+
+
+    Route::group(['prefix' => 'laravel-filemanager'], function () {
+     \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 
     Route::group(['prefix'=>'admintp','middleware'=>'admin'], function()
     {
         Route::get('/', [AdminController::class,'index']);
-        Route::get('/posts',[AdminController::class,'post']);
+
+        //POST ADMINTP
+        Route::get('/posts',[AdminPostController::class,'post']);
+        Route::get('/chua-duyet',[AdminPostController::class,'chua_duyet']);
+        Route::get('/create-post', [AdminPostController::class,'create_post'])->name('create_post_ad');
+        Route::post('/create-post', [AdminPostController::class,'store'])->name('store_post_ad');
+
+        Route::post('/upload_image',[AdminPostController::class,'uploadImage'])->name('upload');
+
+
+
+        //ACCOUNTS
         Route::get('/all-accounts',[AdminController::class,'all_account'])->name('all_accounts');
         Route::get('/blocked',[AdminController::class,'blocked']);
-        Route::get('/chua-duyet',[AdminController::class,'chua_duyet']);
         
+        //ANALYTICS
+        Route::get('/analytics-users', [AdminController::class,'analyticUser'])->name('analytic-user');
     });
 
     // Route::resource('/messages', MessagesController::class)->only([
     //     'index', 'show','store'
     // ]);
+
     //SOCKET IO (node serversk)
     Route::get('/messages', [MessagesController::class, 'index_room']);
     Route::get('messages/{id}', [MessagesController::class, 'show_room']);
 
+
+    //POST
     Route::group(['prefix' => 'posts'], function () {
         Route::get('/drafts', [PostController::class,'drafts'])->name('list_drafts');
         Route::get('/create', [PostController::class,'create'])->name('create_post')->middleware('can:post.create');
@@ -64,6 +87,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 });
 
+//SEARCH 
 Route::get('/posts', [PostController::class, 'index'])->name('list_posts');
 Route::get('/p/{slug}', [PostController::class,'find_slug'])->name('slug_post');
 Route::get('/show/{id}', [PostController::class,'show'])->name('show_post');
@@ -73,4 +97,7 @@ Route::get('/test', function () {
     // return view('livewire.list-user');
 });
 
-Route::get('/admin', [AdminController::class,'testGate']);
+Route::get('/admin-gate', [AdminController::class,'testGate']);
+Route::get('/test-upload', [AdminController::class,'testUpload']);
+Route::get('/list', [AdminController::class,'list']);
+

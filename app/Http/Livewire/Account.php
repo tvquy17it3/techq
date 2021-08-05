@@ -32,13 +32,13 @@ class Account extends Component
             
             $users =  User::whereHas('roles', function($q){
                 $q->whereNotIn('slug', ['admin']);
-            })->where('name', 'like','%'.$this->search.'%')->simplePaginate(20);
+            })->where('name', 'like','%'.$this->search.'%')->simplePaginate(10);
             return view('livewire.account',['users' => $users]);
         }
 
         $users =  User::whereHas('roles', function($q){
             $q->whereNotIn('slug', ['admin']);
-        })->orderBy('id', 'ASC')->simplePaginate(20);
+        })->orderBy('id', 'ASC')->simplePaginate(10);
         return view('livewire.account',['users' => $users]);
     }
 

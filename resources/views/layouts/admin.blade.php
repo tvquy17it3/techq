@@ -68,6 +68,7 @@
                       <li><a href="admintp/bao-cao">Báo cáo</a></li>
                       <li><a href="admintp/da-xoa">Đã xoá</a></a></li>
                       <li><a href="admintp/quang-cao">Quảng cáo</a></li>
+                      <li><a href="admintp/create-post">Tạo bài viết</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
@@ -79,9 +80,7 @@
                   <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="chartjs.html">Chart JS</a></li>
-                      <li><a href="chartjs2.html">Chart JS2</a></li>
-                      <li><a href="morisjs.html">Moris JS</a></li>
-                      <li><a href="echarts.html">ECharts</a></li>
+                      <li><a href="admintp/analytics-users">Analytics Users</a></li>
                       <li><a href="other_charts.html">Other Charts</a></li>
                     </ul>
                   </li>
