@@ -52,8 +52,13 @@ Route::group(['middleware' => ['web', 'auth']], function() {
         //POST ADMINTP
         Route::get('/posts',[AdminPostController::class,'post']);
         Route::get('/chua-duyet',[AdminPostController::class,'chua_duyet']);
+        Route::get('/da-duyet',[AdminPostController::class,'da_duyet']);
         Route::get('/create-post', [AdminPostController::class,'create_post'])->name('create_post_ad');
         Route::post('/create-post', [AdminPostController::class,'store'])->name('store_post_ad');
+        Route::get('/edit/{post}', [AdminPostController::class,'edit'])->name('edit_post_ad')->middleware('can:post.update,post');
+        Route::post('/edit/{post}', [AdminPostController::class,'update'])->name('update_post_ad')->middleware('can:post.update,post');
+        Route::get('/publish/{post}', [AdminPostController::class,'publish'])->name('publish_post_ad')->middleware('can:post.publish');
+        Route::get('/unpublish/{post}', [AdminPostController::class,'unpublish'])->name('unpublish_post_ad')->middleware('can:post.publish');
 
         Route::post('/upload_image',[AdminPostController::class,'uploadImage'])->name('upload');
 

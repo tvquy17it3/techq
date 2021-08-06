@@ -6,7 +6,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Post;
 
-class Postun extends Component
+
+class Postpublished extends Component
 {
     use WithPagination;
     public $search = '';
@@ -28,8 +29,8 @@ class Postun extends Component
     }
     public function render()
     {
-        $posts=  Post::unpublished()->where('title', 'like','%'.$this->search.'%')->orderBy('id', 'desc')->simplePaginate(15);
-        return view('livewire.post-unpublished',['posts' => $posts]);
+        $posts=  Post::published()->where('title', 'like','%'.$this->search.'%')->orderBy('id', 'desc')->simplePaginate(15);
+        return view('livewire.post-published',['posts' => $posts]);
     }
 
     public function edit($id)
@@ -37,10 +38,10 @@ class Postun extends Component
         return redirect()->route('edit_post_ad', $id);
     }
 
-    public function publish($postID,$title){
+    public function unpublish($postID,$title){
         $post = Post::findOrFail($postID);
-        $post->published = true;
+        $post->published = false;
         $post->save();
-        $this->dispatchBrowserEvent('published',['message'=>'Đã xuất bản bài viết: '.$title]);
+        $this->dispatchBrowserEvent('unpublished',['message'=>'Đã ẩn bài viết: '.$title]);
     }
 }

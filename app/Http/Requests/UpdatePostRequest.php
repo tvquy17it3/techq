@@ -24,8 +24,10 @@ class UpdatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|min:5',
-            'body' => 'required|min:10',
+            'title' => 'required|min:5|max:250',
+            'body' => 'required|min:5|max:20000',
+            'category_id'=>'required',
+            'thumbnail'=> 'required',
         ];
     }
 
@@ -34,6 +36,8 @@ class UpdatePostRequest extends FormRequest
         return [
             'title.required' => 'Tiêu đề không được để trống!',
             'body.required' => 'Nội dung không được để trống!',
+            'category_id.required' => 'Danh mục không được để trống!',
+            'thumbnail.required' => 'Ảnh thumbnail không được để trống!'
         ];
     }
 }

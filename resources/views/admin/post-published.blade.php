@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Chưa Duyệt')
+@section('title', 'Đã Duyệt')
 @section('css')
 <link href="ad\css\dataTables.bootstrap.min.css" rel="stylesheet">
 <link href="ad\css\toastr.css" rel="stylesheet" />
@@ -9,7 +9,7 @@
 @section('content')
 <!-- page content -->
 <div class="content">
-    @livewire('postun')
+    @livewire('postpublished')
 </div>
 
 @endsection
@@ -28,7 +28,7 @@
         toastr.success(event.detail.message,'Success!!');
     })
 
-    window.addEventListener('published', event=>{
+    window.addEventListener('unpublished', event=>{
         toastr.success(event.detail.message,'Success!!');
     })
 

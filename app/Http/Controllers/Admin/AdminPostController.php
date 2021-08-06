@@ -21,6 +21,11 @@ class AdminPostController extends Controller
         return view('admin.post-unpublished');
     }
 
+    public function da_duyet()
+    {
+        return view('admin.post-published');
+    }
+
     public function create_post()
     {
 
@@ -78,10 +83,42 @@ class AdminPostController extends Controller
         if (!$post->save())
         {
             abort(500, 'Error');
-        }else{
-            abort(500, 'Error');
         }
-        return redirect()->route('edit_post', $post->id)->with('success', 'Tạo bài viết thành công!');
+        return redirect()->route('edit_post_ad', $post->id)->with('success', 'Tạo bài viết thành công!');
     }
+
+    public function edit(Post $post)
+    {
+        // dd($post);
+        $categories = Category::All();
+        return view('admin.edit-post', compact('post'),compact('categories'));
+    }
+
+    public function update(Post $post, UpdatePostRequest $request)
+    {
+        $data = $request->only('title','category_id','thumbnail', 'body');
+        $data['category_id'] = $data['category_id'][0];
+        $post->fill($data)->save();
+    
+        return back()->with('success', 'Cập nhật bài viết!');
+    }
+
+    public function publish(Post $post)
+    {
+        $post->published = true;
+        $post->save();
+        return back()->with('success', 'Xuất bản thành công!');
+    }
+
+    public function unpublish(Post $post)
+    {
+        $post->published = false;
+        $post->save();
+        return back()->with('success', 'Xuất ẩn bài viết!');
+    }
+
+
+
+
 
 }
