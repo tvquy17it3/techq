@@ -76,7 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasAccess(array $permissions)
     {
-        dd($permissions);
         // check if the permission is available in any role
         foreach($this->roles as $role){
             if ($role->hasAccess($permissions)) {
@@ -96,6 +95,16 @@ class User extends Authenticatable implements MustVerifyEmail
        return $this->roles()->where('slug', 'admin')->count() == 1;
     }
 
+
+    public function scopeSearch($query, $term)
+    {
+        $term = "%$term%";
+        $query->where(function ($query) use ($term) {
+            $query->where('name', 'like', $term)
+                ->orWhere('email', 'like', $term)
+                ->orWhere('phone', 'like', $term);
+        });
+    }
+
 }
 // https://topdev.vn/blog/phan-quyen-nguoi-dung-voi-laravel-authorization/
-//Model User có quan hệ nhiều – nhiều với model Role thông qua bảng role_users

@@ -32,7 +32,14 @@ class AuthServiceProvider extends ServiceProvider
         //https://www.youtube.com/watch?v=vbfpxi9SDvw&list=PL3V6a6RU5ogHVV4rI49IRVXoHXiWVQoAk
         Gate::define('is_admin', function($user){
             return $user->isSuperAdmin();
-        }
-    );
+            });
+
+        Gate::define('user-update', function ($user) {
+            return $user->isSuperAdmin() || $user->hasAccess(['user.update']);
+        });
+
+        Gate::define('user-view', function ($user) {
+            return $user->isSuperAdmin() || $user->hasAccess(['user.view']);
+        });
     }
 }

@@ -24,17 +24,18 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $cate = Category::where('slug', 'doi-song')->first();
+        $cate = Category::pluck('id')->random();
         $title = $this->faker->sentence($nbWords = 6, $variableNbWords = true);
+
         return [
               'title' => $title,
               'body' => $this->faker->text($maxNbChars = 2000),
               'slug' => Str::slug($title, '-'),
               'thumbnail' =>'https://static.tapchitaichinh.vn/600x315/images/upload/duongthanhhai/05082020/15-dia-diem-du-lich-hot-nhat-viet-nam.jpg',
-              'category_id'=> $cate->id,
+              'category_id'=> $cate,
               'views'=>0,
               'published' => rand(0,1),
-              'user_id' =>  User::all()->random()->id
+              'user_id' =>  User::pluck('id')->random()
         ];
     }
 }

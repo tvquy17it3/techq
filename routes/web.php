@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
      \UniSharp\LaravelFilemanager\Lfm::routes();
     });
 
-    Route::group(['prefix'=>'admintp','middleware'=>'admin'], function()
+    Route::group(['prefix'=>'admintp','middleware'=>'admintp'], function()
     {
         Route::get('/', [AdminController::class,'index']);
 
@@ -62,15 +62,18 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 
         Route::post('/upload_image',[AdminPostController::class,'uploadImage'])->name('upload');
 
-
-
         //ACCOUNTS
         Route::get('/all-accounts',[AdminController::class,'all_account'])->name('all_accounts');
         Route::get('/blocked',[AdminController::class,'blocked']);
+
+        //roles and permissions
+        Route::get('roles-permissions',[AdminController::class,'role_permission'])->name('roles_permissions');
         
         //ANALYTICS
         Route::get('/analytics-users', [AdminController::class,'analyticUser'])->name('analytic-user');
     });
+
+
 
     // Route::resource('/messages', MessagesController::class)->only([
     //     'index', 'show','store'

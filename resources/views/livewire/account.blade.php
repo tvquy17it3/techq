@@ -6,7 +6,7 @@
         <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                 <div class="input-group">
-                    <input class="form-control" wire:model="search" type="text" placeholder="Search users..." />
+                    <input class="form-control" wire:model.debounce.500ms="search" type="text" placeholder="Search users..." />
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">Go!</button>
                     </span>
@@ -30,9 +30,48 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card-box table-responsive">
+                                <div class="col-md-12" style="margin-bottom: 20px;">
+                                    <div class="col-md-2">
+                                        <div class="d-flex align-items-center ml-4">
+                                            <label for="paginate" class="text-nowrap mr-2 mb-0">Hiển thị</label>
+                                            <select wire:model="paginate" name="paginate" id="paginate" class="form-control form-control-sm">
+                                                <option value="10">10</option>
+                                                <option value="20">20</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @can('user-update')
+                                    <div class="col-md-5">
+                                        <div class="dropdown ml-4">
+                                            @if($checked)
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    Đã chọn <span class="badge badge-light"> {{ count($checked) }} </span>
+                                                </button>
+                                                <button type="button" class="btn btn-secondary" wire:click="emptyChecked">
+                                                    Hủy chọn
+                                                </button>
+                                            @endif
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" type="button"
+                                                    onclick="confirm('Khôi phục các tài khoản đã chọn?') || event.stopImmediatePropagation()"
+                                                    wire:click="blockChecked">
+                                                    Khóa tài khoản
+                                                </a>
+                                                <a class="dropdown-item" type="button"
+                                                    onclick="confirm('Bạn có chắc chắn xóa các tài khoản đã chọn. Mọi bài viết của tài khoản này cũng sẽ bị xoá?') || event.stopImmediatePropagation()"
+                                                    wire:click="deleteChecked">
+                                                    Xóa tài khoản
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endcan
+                                </div>
                                 <table id="datatable-fixed-header" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Email</th>
@@ -45,27 +84,32 @@
                                     </thead>
                                     <tbody>
                                         @foreach($users as $values)
-                                        <tr>
+                                        <tr class="@if($this->isChecked($values->id)) table-primary @endif">
+                                             <td><input type="checkbox" name="" wire:model="checked" value="{{$values->id}}"></td>
                                             <td>{{$values->id}}</td>
                                             <td>{{$values->name}}</td>
                                             <td>{{$values->email}}</td>
                                             <td>{{$values->phone}}</td>
                                             <td>
                                                 @if (!$values->roles->isEmpty())
-                                                @foreach ($values->roles as $roles)
-                                                {{$roles->slug}}(
-                                                @foreach ($roles->permissions as $key => $role)
-                                                {{$key.", "}}
-                                                @endforeach
-                                                )
-                                                @endforeach
+                                                    @foreach ($values->roles as $roles)
+                                                        {{$roles->slug}}(
+                                                            @foreach ($roles->permissions as $key => $role)
+                                                                {{$key.", "}}
+                                                            @endforeach
+                                                        )
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td>{{$values->email_verified_at}}</td>
                                             <td>{{$values->created_at}}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                @can('user-update')
+                                                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                    <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                @else
+                                                    <p>No Permission</p>
+                                                @endcan
                                             </td>
                                         </tr>
                                         @endforeach

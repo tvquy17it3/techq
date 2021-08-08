@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
@@ -10,11 +11,15 @@ use App\Models\Role;
 class Account extends Component
 {
     use WithPagination;
+    use AuthorizesRequests;
     public $search = '';
     public $userId = null;
     public $email = null;
     public $selection=[];
     public $roles=[];
+    public $checked =[];
+    public $paginate= 10;
+
 
     public function __construct()
     {
@@ -28,17 +33,18 @@ class Account extends Component
     // https://laravel-livewire.com/docs/2.x/input-validation
     public function render()
     {
+        $this->authorize('user-view');
         if ($this->search !=null) {
             
             $users =  User::whereHas('roles', function($q){
                 $q->whereNotIn('slug', ['admin']);
-            })->where('name', 'like','%'.$this->search.'%')->simplePaginate(10);
+            })->search(trim($this->search))->simplePaginate($this->paginate);
             return view('livewire.account',['users' => $users]);
         }
 
         $users =  User::whereHas('roles', function($q){
             $q->whereNotIn('slug', ['admin']);
-        })->orderBy('id', 'ASC')->simplePaginate(10);
+        })->orderBy('id', 'ASC')->simplePaginate($this->paginate);
         return view('livewire.account',['users' => $users]);
     }
 
@@ -64,5 +70,26 @@ class Account extends Component
     {
         User::findOrFail($this->userId)->delete();
         $this->dispatchBrowserEvent('hide-delete-modal',['message'=>'Đã khoá tài khoản: '.$this->email]);
+    }
+
+    public function isChecked($user_id)
+    {
+        return in_array($user_id, $this->checked);
+    }
+    public function emptyChecked()
+    {
+        $this->checked = [];
+    }
+
+    public function blockChecked()
+    {
+        $result = User::WhereKey($this->checked)->delete();
+
+        if ( $result == true ) {
+            $this->dispatchBrowserEvent('noti',['message'=> 'Đã khóa các tài khoản!']);
+        }else{
+            $this->dispatchBrowserEvent('noti-error',['message'=> 'Đã có lỗi xảy ra!']);
+        }
+        $this->checked = [];
     }
 }

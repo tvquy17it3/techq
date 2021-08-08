@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Accounts')
+@section('title', 'Role Permisson')
 @section('css')
 <link href="ad\css\dataTables.bootstrap.min.css" rel="stylesheet">
 <link href="ad\css\toastr.css" rel="stylesheet" />
@@ -9,20 +9,13 @@
 @section('content')
 <!-- page content -->
 <div class="content">
-    @if ($typeAccount=='all-accounts')
-        @livewire('account')
-    @endif
-
-    @if ($typeAccount=='blocked')
-        @livewire('blocked')
-    @endif
+    
+    @livewire('rolepermission')
     
 </div>
 
 @endsection
 @section('scripts')
-<!-- <script src="ad/js/jquery.dataTables.min.js"></script> -->
-<!-- <script src="ad/js/dataTables.bootstrap.min.js"></script> -->
 <script src="ad/js/toastr.js"></script>
 <script type="text/javascript" src="ad/js/dash/dashboad.js"> </script>
 <script>
@@ -60,14 +53,10 @@
     })
 
     window.addEventListener('noti', event=>{
+        $('#show-edit-modal').modal('hide');
         toastr.success(event.detail.message,'Success!!');
-    })
-
-    window.addEventListener('noti-error', event=>{
-        toastr.error(event.detail.message,'Error!!');
     })
 
 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 @endsection

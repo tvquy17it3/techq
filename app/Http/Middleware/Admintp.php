@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
-class IsAdmin
+class Admintp
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Auth::user()->isSuperAdmin()){
+        $user = Auth::user();
+        if(!$user->isSuperAdmin() && !$user->hasAccess(['admintp.access'])){
             abort(403);
         }
         return $next($request);

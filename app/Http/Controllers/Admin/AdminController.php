@@ -78,4 +78,9 @@ class AdminController extends Controller
         return $contents;
 
     }
+
+    public function role_permission()
+    {
+        return view('admin.role-permission');
+    }
 }

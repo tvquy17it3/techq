@@ -32,7 +32,6 @@ class Role extends Model
 
     private function hasPermission(string $permission) : bool
     {
-        dd($permission);
         return $this->permissions[$permission] ?? false;
     }
 }

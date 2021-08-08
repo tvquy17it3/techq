@@ -88,6 +88,7 @@
                     <ul class="nav child_menu">
                       <li><a href="admintp/all-accounts">All users</a></li>
                       <li><a href="admintp/blocked">Blocks</a></li>
+                      <li><a href="admintp/roles-permissions">Phân quyền</a></li>
                     </ul>
                   </li>
                 </ul>
