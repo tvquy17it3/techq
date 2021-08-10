@@ -23,7 +23,7 @@ class Blocked extends Component
 
     public function render()
     {
-        $this->authorize('user-view');
+        $this->authorize('user.view');
 
         if ($this->search !=null) {
             $users =  User::withTrashed()->whereHas('roles', function($q){

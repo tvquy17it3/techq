@@ -54,7 +54,9 @@
                                             <td>{{$values->created_at}}</td>
                                         </td>
                                         <td>
+                                            @can('post.publish')
                                             <button type="button" class="btn btn-info btn-sm" onclick="confirm('Are you sure you want to delete this record?') || event.stopImmediatePropagation()" wire:click="unpublish({{ $values->id}},'{{$values->title }}')"><span class="badge badge-info">Ẩn bài viết</span></button>
+                                            @endcan
                                             <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                             <button type="button" wire:click.prevent="confirmPostRemoved({{ $values->id}},'{{$values->title }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                         </td>

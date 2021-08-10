@@ -33,7 +33,7 @@ class Account extends Component
     // https://laravel-livewire.com/docs/2.x/input-validation
     public function render()
     {
-        $this->authorize('user-view');
+        $this->authorize('user.view');
         if ($this->search !=null) {
             
             $users =  User::whereHas('roles', function($q){

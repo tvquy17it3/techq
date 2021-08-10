@@ -34,12 +34,28 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isSuperAdmin();
             });
 
-        Gate::define('user-update', function ($user) {
+        Gate::define('user.update', function ($user) {
             return $user->isSuperAdmin() || $user->hasAccess(['user.update']);
         });
 
-        Gate::define('user-view', function ($user) {
+        Gate::define('user.view', function ($user) {
             return $user->isSuperAdmin() || $user->hasAccess(['user.view']);
+        });
+
+        Gate::define('role.view', function ($user) {
+            return $user->isSuperAdmin() || $user->hasAccess(['role.view']);
+        });
+
+        Gate::define('role.update', function ($user) {
+            return $user->isSuperAdmin() || $user->hasAccess(['role.update']);
+        });
+
+        Gate::define('role.create', function ($user) {
+            return $user->isSuperAdmin();
+        });
+
+        Gate::define('role.delete', function ($user) {
+            return $user->isSuperAdmin();
         });
     }
 }

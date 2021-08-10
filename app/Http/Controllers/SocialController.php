@@ -56,7 +56,7 @@ class SocialController extends Controller
                 'url'=> URL::to('')
             ];
             $user->markEmailAsVerified();
-            $author = Role::where('slug', 'author')->first();
+            $author = Role::where('slug', 'user')->first();
             $user->roles()->attach($author);
             Mail::to($getInfo->email)->send(new NewMail($detail));
         }

@@ -31,7 +31,7 @@ class PostFactory extends Factory
               'title' => $title,
               'body' => $this->faker->text($maxNbChars = 2000),
               'slug' => Str::slug($title, '-'),
-              'thumbnail' =>'https://static.tapchitaichinh.vn/600x315/images/upload/duongthanhhai/05082020/15-dia-diem-du-lich-hot-nhat-viet-nam.jpg',
+              'thumbnail' =>'http://localhost:8000/storage/photos/1/download (5).jpeg',
               'category_id'=> $cate,
               'views'=>0,
               'published' => rand(0,1),

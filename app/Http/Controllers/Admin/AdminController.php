@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Storage;
@@ -81,6 +82,42 @@ class AdminController extends Controller
 
     public function role_permission()
     {
-        return view('admin.role-permission');
+        $roles = Role::All();
+        return view('admin.role-permission',['roles'=>$roles]);
+    }
+
+    public function permissions(Role $role)
+    {
+        return view('admin.permission',compact('role'));
+    }
+
+    public function update_permissions(Request $request, Role $role)
+    {
+        $list = $request->check_list;
+        $permission = $role->permissions;
+        foreach($role->permissions as $key => $v){
+            if($list){
+                in_array($key,$list) ? $permission[$key]=true : $permission[$key]=false;
+            }else{
+                $permission[$key]=false;
+            }
+        }
+        $role->permissions=$permission;
+        $rs = $role->save();
+
+        if (!$rs) {
+            return redirect()->back()->withErrors(['Cannot update permission!']);
+        }
+        return redirect()->back()->with('success', 'Permissions updated!');
     }
 }
+//{
+// "post.create":true,
+// "post.update":true,
+// "post.publish":false,
+// "user.view":true,
+// "user.update":false,
+// "role.view":true,
+// "role.update":false,
+// "admintp.access":true
+// }

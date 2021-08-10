@@ -29,12 +29,17 @@ class RolesSeeder extends Seeder
                 'post.create' => true,
                 'post.update' => true,
                 'post.publish' => true,
+                'user.view' => true,
+                'user.update' =>true,
+                'role.view' =>true,
+                'role.update'=>true,
+                'admintp.access'=>true,
             ]
         ]);
 
         $author = Role::create([
-            'name' => 'Tác giả', 
-            'slug' => 'author',
+            'name' => 'User', 
+            'slug' => 'user',
             'permissions' => [
                 'post.create' => true,
             ]

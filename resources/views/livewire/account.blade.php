@@ -41,7 +41,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    @can('user-update')
+                                    @can('user.update')
                                     <div class="col-md-5">
                                         <div class="dropdown ml-4">
                                             @if($checked)
@@ -54,7 +54,7 @@
                                             @endif
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" type="button"
-                                                    onclick="confirm('Khôi phục các tài khoản đã chọn?') || event.stopImmediatePropagation()"
+                                                    onclick="confirm('Khóa các tài khoản đã chọn?') || event.stopImmediatePropagation()"
                                                     wire:click="blockChecked">
                                                     Khóa tài khoản
                                                 </a>
@@ -91,20 +91,22 @@
                                             <td>{{$values->email}}</td>
                                             <td>{{$values->phone}}</td>
                                             <td>
+
                                                 @if (!$values->roles->isEmpty())
-                                                    @foreach ($values->roles as $roles)
-                                                        {{$roles->slug}}(
-                                                            @foreach ($roles->permissions as $key => $role)
-                                                                {{$key.", "}}
-                                                            @endforeach
-                                                        )
+                                                    @foreach ($values->roles as $r)
+                                                        <h2><label class="badge badge-success">{{$r->name}}</label></h2>
                                                     @endforeach
                                                 @endif
+                                                <!-- $roles->slug(
+                                                foreach ($roles->permissions as $key => $role)
+                                                $key.", "
+                                                endforeach
+                                                ) -->
                                             </td>
                                             <td>{{$values->email_verified_at}}</td>
                                             <td>{{$values->created_at}}</td>
                                             <td>
-                                                @can('user-update')
+                                                @can('user.update')
                                                     <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                                     <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
                                                 @else

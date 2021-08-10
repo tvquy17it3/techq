@@ -18,14 +18,51 @@
               <td>{{$role->name}}</td>
               <td>{{$role->slug}}</td>
               <td>
-                @foreach ($role->permissions as $key => $permission)
-                    <span class="btn badge badge-primary">{{$key.":".($permission ? 'true' :' false')}}</span>
+                @foreach ($role->permissions as $key => $pms)
+                    <span class="btn badge badge-primary">{{$key.":".($pms ? 'true' :' false')}}</span>
                 @endforeach
               </td>
               <td>{{$role->created_at}}</td>
               <td>{{$role->updated_at}}</td>
+              <td>
+                @can('user-update')
+                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $role->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                @else
+                    <p>No Permission</p>
+                @endcan
+              </td>
           </tr>
             @endforeach
         </tbody>
     </table>
+
+
+    <div class="modal fade" id="show-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form wire:submit.prevent="savePermission">
+                    <div class="modal-header">
+                        <h2>Edit Role</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="hiddenCB">
+                          <h3>Make your choice(s)</h3>
+                          <div>
+                            @foreach($permissions as $key => $valuePMS)
+                                <p>
+                                    <input type="checkbox" value="{{$valuePMS}}" wire:model="{{$key}}" {{$valuePMS != true?: 'checked' }}> {{$key}}
+                                </p>
+                            @endforeach
+                          </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

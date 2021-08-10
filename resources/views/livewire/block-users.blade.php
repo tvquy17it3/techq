@@ -44,7 +44,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    @can('user-update')
+                                    @can('user.update')
                                     <div class="col-md-5">
                                         <div class="dropdown ml-4">
                                             @if($checked)
@@ -96,19 +96,15 @@
                                                 <td>{{$values->phone}}</td>
                                                 <td>
                                                 @if (!$values->roles->isEmpty())
-                                                    @foreach ($values->roles as $roles)
-                                                        {{$roles->slug}}(
-                                                            @foreach ($roles->permissions as $key => $role)
-                                                                {{$key.", "}}
-                                                            @endforeach
-                                                        )
+                                                    @foreach ($values->roles as $r)
+                                                        <h2><label class="badge badge-success">{{$r->name}}</label></h2>
                                                     @endforeach
                                                 @endif
                                                 </td>
                                                 <td>{{$values->email_verified_at}}</td>
                                                 <td>{{$values->created_at}}</td>
                                                 <td>
-                                                    @can('user-update')
+                                                    @can('user.update')
 
                                                         <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                                         

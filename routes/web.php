@@ -67,8 +67,11 @@ Route::group(['middleware' => ['web', 'auth']], function() {
         Route::get('/blocked',[AdminController::class,'blocked']);
 
         //roles and permissions
-        Route::get('roles-permissions',[AdminController::class,'role_permission'])->name('roles_permissions');
-        
+        Route::get('roles-permissions',[AdminController::class,'role_permission'])->name('roles_permissions')->middleware('can:role.view');
+        Route::get('permission/{role}',[AdminController::class,'permissions'])->name('edit-permisson')->middleware('can:role.update');
+        Route::post('permission/{role}',[AdminController::class,'update_permissions'])->name('update-permissons')->middleware('can:role.update');
+
+        Route::get('role/create',[AdminController::class,'role_create'])->name('role-create')->middleware('can:role.create');
         //ANALYTICS
         Route::get('/analytics-users', [AdminController::class,'analyticUser'])->name('analytic-user');
     });

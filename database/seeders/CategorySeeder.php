@@ -14,14 +14,19 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $admin = Category::create([
+        $cate1 = Category::create([
             'name' => 'Công nghệ', 
             'slug' => 'cong-nghe',
         ]);
         
-        $editor = Category::create([
+        $cate2 = Category::create([
             'name' => 'Đời sống', 
             'slug' => 'doi-song',
+        ]);
+
+        $cate3 = Category::create([
+            'name' => 'Bản nháp', 
+            'slug' => 'ban-nhap',
         ]);
     }
 }

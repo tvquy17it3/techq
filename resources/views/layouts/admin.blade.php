@@ -84,10 +84,10 @@
                       <li><a href="other_charts.html">Other Charts</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-clone"></i>Account <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-clone"></i>Quản lý tài khoản <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="admintp/all-accounts">All users</a></li>
-                      <li><a href="admintp/blocked">Blocks</a></li>
+                      <li><a href="admintp/all-accounts">Tài khoản</a></li>
+                      <li><a href="admintp/blocked">Đã khóa</a></li>
                       <li><a href="admintp/roles-permissions">Phân quyền</a></li>
                     </ul>
                   </li>
