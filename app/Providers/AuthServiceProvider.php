@@ -57,5 +57,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('role.delete', function ($user) {
             return $user->isSuperAdmin();
         });
+
+        Gate::define('role.update-user', function ($user) {
+            return $user->isSuperAdmin() || $user->hasAccess(['role.update-user']);
+        });
     }
 }

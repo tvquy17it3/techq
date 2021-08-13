@@ -50,15 +50,6 @@
         toastr.success(event.detail.message,'Success!!');
     })
 
-    window.addEventListener('show-edit-modal', event=>{
-        $('#show-edit-modal').modal('show');
-    })
-
-    window.addEventListener('hide-edit-modal', event=>{
-        $('#show-edit-modal').modal('hide');
-        toastr.success(event.detail.message,'Success!!');
-    })
-
     window.addEventListener('noti', event=>{
         toastr.success(event.detail.message,'Success!!');
     })
@@ -67,6 +58,10 @@
         toastr.error(event.detail.message,'Error!!');
     })
 
+    window.addEventListener('hide-modal-noti-error', event=>{
+        $('#confirm-delete').modal('hide');
+        toastr.error(event.detail.message,'Error!!');
+    })
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>

@@ -56,7 +56,7 @@ class PostPolicy
 
     public function draft(User $user)
     {
-        return $user->inRole('editor');
+        return $user->hasAccess(['post.draft']);
     }
 
     /**

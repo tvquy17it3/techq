@@ -81,20 +81,5 @@
       "onclick": null,
     }
 
-    window.addEventListener('show-edit-modal', event=>{
-        $('#show-edit-modal').modal('show');
-    })
-
-    window.addEventListener('hide-edit-modal', event=>{
-        $('#show-edit-modal').modal('hide');
-        toastr.success(event.detail.message,'Success!!');
-    })
-
-    window.addEventListener('noti', event=>{
-        $('#show-edit-modal').modal('hide');
-        toastr.success(event.detail.message,'Success!!');
-    })
-
-
 </script>
 @endsection

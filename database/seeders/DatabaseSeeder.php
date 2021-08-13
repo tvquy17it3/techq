@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
         //     }
         // });
 
-        $this->call(RolesSeeder::class);
-        $this->call(UsersSeeder::class);
-        $this->call(CategorySeeder::class);
+        // $this->call(RolesSeeder::class);
+        // $this->call(UsersSeeder::class);
+        // $this->call(CategorySeeder::class);
         
 
         User::factory(50)->create();
@@ -39,6 +39,6 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        $this->call(PostsSeeder::class);
+        // $this->call(PostsSeeder::class);
     }
 }

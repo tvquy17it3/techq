@@ -64,6 +64,11 @@
 <script src="ad/js/toastr.js"></script>
 <script type="text/javascript" src="ad/js/dash/dashboad.js"> </script>
 <script>
+    toastr.options = {
+      "newestOnTop": true,
+      "progressBar": true,
+      "onclick": null,
+    }
     $(document).ready(function() {
         var check = "{{\Session::has('success')}}";
         if (check !="") {

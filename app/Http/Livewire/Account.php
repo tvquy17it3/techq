@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class Account extends Component
 {
@@ -36,27 +37,12 @@ class Account extends Component
         $this->authorize('user.view');
         if ($this->search !=null) {
             
-            $users =  User::whereHas('roles', function($q){
-                $q->whereNotIn('slug', ['admin']);
-            })->search(trim($this->search))->simplePaginate($this->paginate);
+            $users =  User::search(trim($this->search))->simplePaginate($this->paginate);
             return view('livewire.account',['users' => $users]);
         }
 
-        $users =  User::whereHas('roles', function($q){
-            $q->whereNotIn('slug', ['admin']);
-        })->orderBy('id', 'ASC')->simplePaginate($this->paginate);
+        $users =  User::orderBy('id', 'ASC')->simplePaginate($this->paginate);
         return view('livewire.account',['users' => $users]);
-    }
-
-    public function edit($user_id)
-    {
-        $this->userId = $user_id;
-        $this->dispatchBrowserEvent('show-edit-modal');
-    }
-
-    public function confirmEdit()
-    {
-        $this->dispatchBrowserEvent('hide-edit-modal',['message'=>'Đã edit tài khoản: ']);
     }
 
     public function confirmUserRemoved($user_id, $email)
@@ -66,10 +52,32 @@ class Account extends Component
         $this->dispatchBrowserEvent('show-delete-modal');
     }
 
-    public function deleteUser()
+    public function blockUser()
     {
-        User::findOrFail($this->userId)->delete();
-        $this->dispatchBrowserEvent('hide-delete-modal',['message'=>'Đã khoá tài khoản: '.$this->email]);
+        $this->authorize('user.update');
+        $userC = User::findOrFail($this->userId);
+        if ($userC->inRole('admin')) {
+            $u =  User::whereHas('roles', function($q){
+                $q->whereIn('slug', ['admin']);
+            })->count();
+            if ($u<=1) {
+                $this->dispatchBrowserEvent('hide-modal-noti-error',['message'=>'Không thể khóa tài khoản này, bởi vì chỉ có 1 tài khoản admin!']);
+            }else{
+                if(Auth::user()->inRole("admin")){
+                    $userC->delete();
+                    $this->dispatchBrowserEvent('hide-delete-modal',['message'=>'Đã khoá tài khoản: '.$this->email]);
+                }else{
+                    $this->dispatchBrowserEvent('hide-modal-noti-error',['message'=>'Chỉ có quyền Admin mới có thể khóa tài khoản admin khác!']);
+                }
+                
+            }
+        }else{
+            $userC->delete();
+            $this->dispatchBrowserEvent('hide-delete-modal',['message'=>'Đã khoá tài khoản: '.$this->email]);
+        }
+
+        // User::findOrFail($this->userId)->delete();
+        
     }
 
     public function isChecked($user_id)
@@ -89,6 +97,17 @@ class Account extends Component
             $this->dispatchBrowserEvent('noti',['message'=> 'Đã khóa các tài khoản!']);
         }else{
             $this->dispatchBrowserEvent('noti-error',['message'=> 'Đã có lỗi xảy ra!']);
+        }
+        $this->checked = [];
+    }
+
+    public function deleteChecked()
+    {
+        $result = User::whereKey($this->checked)->forceDelete();
+        if ( $result == true ) {
+            $this->dispatchBrowserEvent('noti',['message'=> 'Đã xoá tài khoản']);
+        }else{
+            $this->dispatchBrowserEvent('noti',['message'=> 'Error']);
         }
         $this->checked = [];
     }

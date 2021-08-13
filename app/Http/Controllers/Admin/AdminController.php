@@ -4,15 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Storage;
 use File;
+use Validator;
 
 class AdminController extends Controller
 {
+
+    private $userRepo;
+
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
+
     public function index()
     {
         // $users = User::all();
@@ -88,27 +99,37 @@ class AdminController extends Controller
 
     public function permissions(Role $role)
     {
+
         return view('admin.permission',compact('role'));
     }
 
+
     public function update_permissions(Request $request, Role $role)
     {
-        $list = $request->check_list;
-        $permission = $role->permissions;
-        foreach($role->permissions as $key => $v){
-            if($list){
-                in_array($key,$list) ? $permission[$key]=true : $permission[$key]=false;
-            }else{
-                $permission[$key]=false;
-            }
-        }
-        $role->permissions=$permission;
-        $rs = $role->save();
+        $rs = $this->userRepo->update_permissions($request,$role);
 
         if (!$rs) {
             return redirect()->back()->withErrors(['Cannot update permission!']);
         }
         return redirect()->back()->with('success', 'Permissions updated!');
+    }
+
+
+    public function update_role_user(Request $request)
+    {
+        $rs = $this->userRepo->update_roleUser($request);
+        if (!$rs) {
+            return response()->json([
+                'error'    => true,
+                'messages' => ["Đã có lỗi xảy ra!"],
+            ], 422);
+        }
+
+        return response()->json([
+            'error' => false,
+            'id_user'  => $request->id_user,
+            'checkbox'=>$request->checkbox,
+        ], 200);
     }
 }
 //{

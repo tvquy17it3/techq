@@ -85,29 +85,29 @@
                                     <tbody>
                                         @foreach($users as $values)
                                         <tr class="@if($this->isChecked($values->id)) table-primary @endif">
-                                             <td><input type="checkbox" name="" wire:model="checked" value="{{$values->id}}"></td>
+                                             <td>
+                                                @if(!$values->inRole("admin"))
+                                                    <input type="checkbox" name="" wire:model="checked" value="{{$values->id}}">
+                                                @endif
+                                            </td>
                                             <td>{{$values->id}}</td>
                                             <td>{{$values->name}}</td>
                                             <td>{{$values->email}}</td>
                                             <td>{{$values->phone}}</td>
-                                            <td>
-
+                                            <td id="role_user_{{$values->id}}">
+                                                <?php $ta = array();?>
                                                 @if (!$values->roles->isEmpty())
                                                     @foreach ($values->roles as $r)
-                                                        <h2><label class="badge badge-success">{{$r->name}}</label></h2>
+                                                        <h2><label class="badge badge-success" {{$ta[] = $r->id}}>{{$r->name}}</label></h2>
                                                     @endforeach
                                                 @endif
-                                                <!-- $roles->slug(
-                                                foreach ($roles->permissions as $key => $role)
-                                                $key.", "
-                                                endforeach
-                                                ) -->
                                             </td>
                                             <td>{{$values->email_verified_at}}</td>
                                             <td>{{$values->created_at}}</td>
                                             <td>
+
                                                 @can('user.update')
-                                                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-primary btn-sm open-modal" data-toggle="modal" onclick="event.preventDefault();editRoleForm({{$values->id}},'{{$values->email}}',{{json_encode($ta)}},{{json_encode($roles->pluck('id','slug'))}});"><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" title="Edit Role"></i></button>
                                                     <button type="button" wire:click.prevent="confirmUserRemoved({{ $values->id}},'{{$values->email }}')" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
                                                 @else
                                                     <p>No Permission</p>
@@ -128,6 +128,7 @@
         </div>
     </div>
 
+    <!-- Delete User Modal -->
     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -140,34 +141,104 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" wire:click.prevent="deleteUser" class="btn btn-danger">Block</button>
+                    <button type="button" wire:click.prevent="blockUser" class="btn btn-danger">Block</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="show-edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Edit Role Modal -->
+    <div class="modal fade" id="editRoleModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Edit Account</h2>
-                </div>
-                <div class="modal-body">
-                    <select wire:model="selection" name="p" id="p" class="p" multiple>
-                        @foreach($this->roles as $role)
-                            <option value="{{$role->id}}">{{ $role->name }} (
-                                @foreach ($role->permissions as $key => $pms)
-                                    {{$key.", "}}
+                <form id="frmEditRole">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Edit Role 
+                            <br><i><label id="email_user">.</label></i>
+                        </h4>
+                        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                            ×
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" id="edit-error-bag">
+                            <ul id="edit-role-errors">
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Role
+                            </label>
+                            <input id="id_user" name="id_user" type="hidden" value="0">
+                            <div id="containerRole">
+                                @foreach($roles as $per)
+                                    <input type="checkbox" value="{{$per->id}}" name="checkbox[]" id="checkbox{{$per->id}}"> {{$per->name}}<br>
                                 @endforeach
-                            )</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" wire:click.prevent="confirmEdit" class="btn btn-primary">Save changes</button>
-                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="task_id" name="task_id" type="hidden" value="0">
+                            <input class="btn btn-default" data-dismiss="modal" type="button" value="Cancel">
+                                <button class="btn btn-info" id="btn-edit" type="button" value="add">
+                                    Update Role
+                                </button>
+                            </input>
+                        </input>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function editRoleForm(id_user,email,role_user,roles) {
+        $("#edit-error-bag").hide();
+        $('#editRoleModal').modal('show');
+        $("#frmEditRole input[name=id_user]").val(id_user);
+        $("#email_user").text(email);
+        for (var key in roles) {
+            var checkedRole = document.getElementById("checkbox"+roles[key]);
+            role_user.includes(roles[key]) ? checkedRole.checked = true : checkedRole.checked = false;
+        }
+    }
+
+    $(function() {
+        $("#btn-edit").click(function () {
+            var list = $("input[name='checkbox[]']:checked").map(function () {
+                return this.value;
+            }).get();
+            $.ajaxSetup({
+                headers: {
+                }
+            });
+            $.ajax({
+                type: 'put',
+                url: "{{route('update_role_user')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id_user': $("#frmEditRole input[name=id_user]").val(),
+                    'checkbox': list,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    // $('#frmEditRole').trigger("reset");
+                    // $("#frmEditRole .close").click();
+                    window.location.reload();
+                },
+                error: function (data) {
+                    var errors = $.parseJSON(data.responseText);
+                    $('#edit-role-errors').html('');
+                    $.each(errors.messages, function (key, value) {
+                        $('#edit-role-errors').append('<li>' + value + '</li>');
+                    });
+                    $("#edit-error-bag").show();
+                }
+            });
+        });
+    });
+
+</script>

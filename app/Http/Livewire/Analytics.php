@@ -23,7 +23,7 @@ class Analytics extends Component
 
     public function mount()
     {
-        $range = Carbon::now()->subDays(60);
+        $range = Carbon::now()->subDays(90);
         $stats = DB::table('users')
           ->where('created_at', '>=', $range)
           ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d')"))

@@ -51,7 +51,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 
         //POST ADMINTP
         Route::get('/posts',[AdminPostController::class,'post']);
-        Route::get('/chua-duyet',[AdminPostController::class,'chua_duyet']);
+        Route::get('/chua-duyet',[AdminPostController::class,'chua_duyet'])->middleware('can:post.draft');
         Route::get('/da-duyet',[AdminPostController::class,'da_duyet']);
         Route::get('/create-post', [AdminPostController::class,'create_post'])->name('create_post_ad');
         Route::post('/create-post', [AdminPostController::class,'store'])->name('store_post_ad');
@@ -64,6 +64,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 
         //ACCOUNTS
         Route::get('/all-accounts',[AdminController::class,'all_account'])->name('all_accounts');
+        Route::put('/update-role-user',[AdminController::class,'update_role_user'])->name('update_role_user')->middleware('can:role.update-user');
         Route::get('/blocked',[AdminController::class,'blocked']);
 
         //roles and permissions
