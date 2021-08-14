@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\Post\PostRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->singleton(PostRepositoryInterface::class, PostRepository::class);
     }
 
     /**

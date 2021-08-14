@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\PostPublished;
+use App\Mail\MailPublishedPost;
 
 class Post extends Command
 {
@@ -39,6 +39,6 @@ class Post extends Command
      */
     public function handle()
     {
-        Mail::to('tvquy.17it3@vku.udn.vn')->send(new PostPublished());
+        Mail::to('tvquy.17it3@vku.udn.vn')->send(new MailPublishedPost());
     }
 }

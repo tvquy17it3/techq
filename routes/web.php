@@ -109,6 +109,8 @@ Route::get('/test', function () {
     // return view('livewire.list-user');
 });
 
+
+// TEST
 Route::get('/admin-gate', [AdminController::class,'testGate']);
 Route::get('/test-upload', [AdminController::class,'testUpload']);
 Route::get('/list', [AdminController::class,'list']);

@@ -9,13 +9,26 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
+use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Post\PostRepositoryInterface;
+
 class AdminPostController extends Controller
 {
+    private $userRepo;
+    private $postRepo;
+
+    public function __construct(UserRepositoryInterface $userRepo,PostRepositoryInterface $postRepo)
+    {
+        $this->userRepo = $userRepo;
+        $this->postRepo =$postRepo;
+    }
+
+
     public function chua_duyet()
     {
         return view('admin.post-unpublished');
@@ -75,12 +88,8 @@ class AdminPostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        $data = $request->only('title','category_id','thumbnail', 'body');
-        $data['slug'] = Str::slug($data['title']);
-        $data['user_id'] = Auth::user()->id;
-        $data['category_id'] = $data['category_id'][0];
-        $post = Post::create($data);
-        if (!$post->save())
+       $post = $this->postRepo->store($request);
+        if (!$post)
         {
             abort(500, 'Error');
         }
@@ -89,36 +98,27 @@ class AdminPostController extends Controller
 
     public function edit(Post $post)
     {
-        // dd($post);
         $categories = Category::All();
-        return view('admin.edit-post', compact('post'),compact('categories'));
+        $report_status = $this->postRepo->status_report_post($post->id);
+        return view('admin.edit-post',['report'=> $report_status,'post'=>$post,'categories'=>$categories]);
     }
 
     public function update(Post $post, UpdatePostRequest $request)
     {
-        $data = $request->only('title','category_id','thumbnail', 'body');
-        $data['category_id'] = $data['category_id'][0];
-        $post->fill($data)->save();
-    
-        return back()->with('success', 'Cập nhật bài viết!');
+        $rs = $this->postRepo->update($post,$request);
+        return $rs ? back()->with('success', 'Cập nhật bài viết!') : back()->withErrors(['message1'=>'Đã có lỗi xãy ra!']);
     }
+
 
     public function publish(Post $post)
     {
-        $post->published = true;
-        $post->save();
-        return back()->with('success', 'Xuất bản thành công!');
+        $rs = $this->postRepo->publish($post);
+        return $rs ? back()->with('success', 'Xuất bản thành công!') : back()->withErrors(['message1'=>'Đã có lỗi xãy ra!']);
     }
 
     public function unpublish(Post $post)
     {
-        $post->published = false;
-        $post->save();
-        return back()->with('success', 'Xuất ẩn bài viết!');
+        $rs = $this->postRepo->unpublish($post);
+        return $rs ? back()->with('success', 'Xuất ẩn bài viết!') : back()->withErrors(['message1'=>'Đã có lỗi xãy ra!']);
     }
-
-
-
-
-
 }

@@ -6,7 +6,7 @@
         <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                 <div class="input-group">
-                    <input class="form-control" wire:model="search" type="text" placeholder="Tìm kiếm bài chưa duyệt..." />
+                    <input class="form-control" wire:model.debounce.500ms="search" type="text" placeholder="Tìm kiếm bài chưa duyệt..." />
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">Go!</button>
                     </span>
@@ -55,9 +55,9 @@
                                         </td>
                                         <td>
                                             @can('post.publish')
-                                            <button type="button" class="btn btn-info btn-sm" wire:click="publish({{ $values->id}},'{{$values->title }}')"><span class="badge badge-info">Xuất bản</span></button>
+                                            <button type="button" class="btn btn-info btn-sm" onclick="confirm('Are you sure you want to publish this post?') || event.stopImmediatePropagation()" wire:click="publish({{ $values->id}},'{{$values->title }}')"><span class="badge badge-info">Xuất bản</span></button>
                                             @endcan
-                                            <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-primary btn-sm" wire:click="edit_post({{ $values->id }})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                             <button type="button" wire:click.prevent="confirmPostRemoved({{ $values->id}},'{{$values->title }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>

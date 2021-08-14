@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\ReportPost;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Storage;
@@ -131,7 +133,14 @@ class AdminController extends Controller
             'checkbox'=>$request->checkbox,
         ], 200);
     }
+
+
+    
 }
+
+
+
+
 //{
 // "post.create":true,
 // "post.update":true,

@@ -31,6 +31,9 @@
     window.addEventListener('published', event=>{
         toastr.success(event.detail.message,'Success!!');
     })
+    window.addEventListener('noti-error', event=>{
+        toastr.error(event.detail.message,'Error!!');
+    })
 
 </script>
 @endsection

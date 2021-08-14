@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ReportPost;
 
 class Post extends Model
 {
@@ -21,6 +22,12 @@ class Post extends Model
     {
         return $this->belongsTo(Category::class,'category_id');
     }
+
+    public function reportpost()
+    {
+        return $this->hasMany(ReportPost::class,'post_id');
+    }
+
 
     public function scopePublished($query)
     {

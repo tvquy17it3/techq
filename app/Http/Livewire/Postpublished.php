@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Post;
+use App\Repositories\Post\PostRepositoryInterface;
 
 
 class Postpublished extends Component
@@ -14,6 +15,11 @@ class Postpublished extends Component
     public $postIdRemote = null;
     public $title = null;
     
+    public function render(PostRepositoryInterface $postRepo)
+    {
+        $posts = $postRepo->search_post_published($this->search)->simplePaginate(15);
+        return view('livewire.post-published',['posts' => $posts]);
+    }
 
     public function confirmPostRemoved($postID,$title)
     {
@@ -22,15 +28,15 @@ class Postpublished extends Component
         $this->dispatchBrowserEvent('show-delete-modal');
     }
 
-    public function deletePost()
+    public function deletePost(PostRepositoryInterface $postRepo)
     {
-        Post::findOrFail($this->postIdRemote)->delete();
-        $this->dispatchBrowserEvent('hide-delete-modal',['message'=>'Đã xoá bài viết: '.$this->title]);
-    }
-    public function render()
-    {
-        $posts=  Post::published()->where('title', 'like','%'.$this->search.'%')->orderBy('id', 'desc')->simplePaginate(15);
-        return view('livewire.post-published',['posts' => $posts]);
+        $rs = $postRepo->delete($this->postIdRemote);
+        if (!$rs) {
+            $this->noti('noti-error','Đã có lỗi xảy ra!');
+            $this->noti('hide-delete-modal','Error');
+        }else{
+            $this->noti('hide-delete-modal','Đã xoá bài viết: '.$this->title);
+        }
     }
 
     public function edit($id)
@@ -38,10 +44,18 @@ class Postpublished extends Component
         return redirect()->route('edit_post_ad', $id);
     }
 
-    public function unpublish($postID,$title){
-        $post = Post::findOrFail($postID);
-        $post->published = false;
-        $post->save();
-        $this->dispatchBrowserEvent('unpublished',['message'=>'Đã ẩn bài viết: '.$title]);
+    public function unpublish(PostRepositoryInterface $postRepo,Post $postID,$title){
+        $rs = $postRepo->unpublish($postID);
+
+        if (!$rs) {
+            $this->noti('noti-error','Đã có lỗi xảy ra!');
+        }else{
+            $this->noti('unpublished','Đã ẩn bài viết: '.$title);
+        }
+    }
+
+    public function noti($noti,$message)
+    {
+        $this->dispatchBrowserEvent($noti,['message'=>$message]);
     }
 }

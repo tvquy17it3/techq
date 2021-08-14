@@ -29,6 +29,12 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
+                    @if(session('errors'))
+                        <span class="help is-danger" style="color:red">
+                            <strong>{{session('errors')->first('message1');}}</strong>
+                        </span>
+                    @endif
+                    <h2>Tác giả: {{$post->author->name." | Email: ".$post->author->email}}</h2>
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('update_post_ad', ['post' => $post->id]) }}">
                         {{ csrf_field() }}
                         <div class="form-group{{$errors->has('title') ? ' has-error' : ''}}">
@@ -113,7 +119,16 @@
                     </div>
                 </div>
             </form>
+            <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Status</label>
+                    @foreach($report as $rp)
+                     <h2> {{$rp->users->email." | ".$rp->content}}</h2>  
+                    @endforeach
+                    
+                </div>
+
         </div>
+        
     </div>
 </div>
 </div>
