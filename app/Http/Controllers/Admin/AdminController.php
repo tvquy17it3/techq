@@ -28,20 +28,89 @@ class AdminController extends Controller
 
     public function index()
     {
-        // $users = User::all();
-        $users =  User::whereHas('roles', function($q){
-            $q->whereNotIn('slug', ['admin']);
-            
-        })->get();
 
-        foreach ($users as $user)
-        {
-            $role= $user->roles[0];
-            $user->role=  $role->permissions;
-            $user->slug=  "Tên: ".$role->name.", ".$role->slug;
-        }
+        // $users = User::with(['posts' => function ($query) {
+        //     $query->where('id','>','50');
+        // }])->get();
+
         // dd($users);
-        return view('admin.index',['users' => $users]);
+
+
+        $posts = Post::with(['author','categories'])->get();
+
+        // $users = User::with('roles')->paginate(100);
+        // foreach($users as $value){
+        //     print_r($value->roles);
+        // }
+
+        return view('admin.test',compact('posts'));
+
+
+        // $users =  User::whereHas('roles', function($q){
+        //     $q->whereNotIn('slug', ['admin']);
+            
+        // })->get();
+
+        // foreach ($users as $user)
+        // {
+        //     $role= $user->roles[0];
+        //     $user->role=  $role->permissions;
+        //     $user->slug=  "Tên: ".$role->name.", ".$role->slug;
+        // }
+        // return view('admin.index',['users' => $users]);
+    }
+
+    public function load_more_posts(Request $request )
+    {
+        
+        if ($request->id) {
+
+            $posts = Post::with(['author','categories'], function($q){
+                $q->where('published','=', 0);
+            })->where('id','<',$request->id)->orderBy('id', 'desc')->take(5)->get();
+
+        }else{
+
+            $posts = Post::with(['author','categories'], function($q){
+                $q->where('published','=', 0); 
+            })->orderBy('id', 'desc')->take(5)->get();
+        }
+        
+
+        $list_posts = "";
+
+        if (!$posts->isEmpty()) {
+            foreach($posts as $value){
+                $list_posts .= "
+                    <tr>
+                        <th scope='row'>$value->id</th>
+                        <td>$value->title</td>
+                        <td>".$value->author->email."</td>
+                        <td>".$value->author->name."</td>
+                        <td>".$value->categories->name."</td>
+                        <td>$value->created_at</td>
+                        <td>$value->updated_at</td>
+                  </tr>
+                ";
+            }
+
+            $load_more = "<button class='btn btn-primary' data-id='".$value->id."' id='btn_load_more'>Load more</button>";
+            return response()->json([
+                'id' => $request->id,
+                'error' => false,
+                'list_posts'  => $list_posts,
+                'load_more' => $load_more,
+            ], 200);
+        }else{
+            $load_more = "<button class='btn btn-primary'>Null</button>";
+            return response()->json([
+                'id' => $request->id,
+                'error' => false,
+                'load_more' => $load_more,
+            ], 200);
+        }
+
+        
     }
 
     public function all_account()

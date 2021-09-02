@@ -60,6 +60,8 @@ Route::group(['middleware' => ['web', 'auth']], function() {
         Route::get('/publish/{post}', [AdminPostController::class,'publish'])->name('publish_post_ad')->middleware('can:post.publish');
         Route::get('/unpublish/{post}', [AdminPostController::class,'unpublish'])->name('unpublish_post_ad')->middleware('can:post.publish');
 
+        Route::post('/load_more_posts', [AdminController::class,'load_more_posts'])->name('load_more_posts');
+
         Route::post('/upload_image',[AdminPostController::class,'uploadImage'])->name('upload');
 
         //ACCOUNTS
@@ -97,6 +99,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
         Route::post('/edit/{post}', [PostController::class,'update'])->name('update_post')->middleware('can:post.update,post');
         Route::get('/publish/{post}', [PostController::class,'publish'])->name('publish_post')->middleware('can:post.publish');
     });
+
 });
 
 //SEARCH 

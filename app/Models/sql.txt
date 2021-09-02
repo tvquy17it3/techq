@@ -1,0 +1,212 @@
+1) UNION 
+Toán tử UNION cho phép bạn nối kết quả của hai hoặc nhiều câu truy vấn lại với nhau để trở thành một danh sách kết quả duy nhất.
+
+SELECT column1, column2
+UNION [DISTINCT | ALL]
+SELECT column1, column2
+UNION [DISTINCT | ALL]
+
+Số lượng colums trong tất cả các lệnh SELECT phải bằng nhau
+Mỗi column tương ứng vị trí phải có cùng kiểu dữ liệu và độ dài
+
+Nếu chọn UNION DISTINCT thì nó sẽ loại bỏ kết quả trùng.
+Nếu chọn UNION ALL thì nó giữ lại kết quả trùng.
+Nếu bạn không chọn gì thì mặc định nó sẽ lấy UNION DISTINCT
+
+SELECT id, title FROM news_1
+UNION
+SELECT id, title FROM news_2
+
+Lấy dữ liệu của hai bảng news_1 và news_2 và sau đó gom lại thành một kết quả
+Với lệnh ALL thì dù bị trùng lặp nhưng nó vẫn trả về kết quả.
+
+SQL> SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     LEFT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID
+UNION ALL
+     SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     RIGHT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID
+
+2) INTERSECT
+Toán tử INTERSECT chỉ trả về bản ghi nằm chung giữa các lệnh SELECT.
+
+SELECT bieu_thuc1, ...
+FROM bang
+[WHERE dieu_kien]
+INTERSECT
+SELECT bieu_thuc1, ...
+FROM bang
+[WHERE dieu_kien];
+
+Hai lệnh SELECT phải có cùng số biểu thức.
+Cột tương ứng trong mỗi lệnh SELECT phải có cùng kiểu dữ liệu.
+
+SELECT sanpham_id
+FROM sanpham
+WHERE sanpham_id >= 50
+INTERSECT 
+SELECT sanpham_id
+FROM hangtonkho
+WHERE soluong > 0;
+
+3) EXCEPT
+Mệnh đề EXCEPT chỉ trả về các hàng, mà không có sẵn trong lệnh SELECT thứ hai.
+SELECT cot1 [, cot2 ]
+FROM bang1 [, bang2 ]
+[WHERE dieu_kien]
+
+EXCEPT
+
+SELECT cot1 [, cot2 ]
+FROM bang1 [, bang2 ]
+[WHERE dieu_kien]
+
+
+SINHVIEN
++----+---------+-----+-----------+--------+
+| ID |  TEN    | TUOI|  KHOAHOC  | HOCPHI |
++----+---------+-----+-----------+---------+
+|  1 | Hoang   |  21 | CNTT      | 4000000
+|  2 | Viet    |  19 | DTVT      | 3000000  
+|  3 | Thanh   |  18 | KTDN      | 4000000  
+|  4 | Nhan    |  19 | CK        | 4500000 
+|  5 | Huong   |  20 | TCNH      | 5000000 
++----+---------+-----+-----------+---------+
+MUONSACH
++-----+---------------------+-------------+--------+
+|STT  | NGAY                | SINHVIEN_ID | SOTIEN |
++-----+---------------------+-------------+--------+
+| 102 | 2009-10-08 00:00:00 |           3 |   320 |
+| 100 | 2009-10-08 00:00:00 |           3 |   250 |
+| 101 | 2009-11-20 00:00:00 |           2 |   280 |
+| 103 | 2008-05-20 00:00:00 |           4 |   290 |
++-----+---------------------+-------------+--------+
+
+SQL> SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     LEFT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID
+EXCEPT
+     SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     RIGHT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID;
+
++----+---------+--------+---------------------+
+| ID | TEN    | SOTIEN | NGAY                |
++----+---------+--------+---------------------+
+|  1 | Hoang  |   NULL | NULL                |
+|  5 | Huong  |   NULL | NULL                |
++----+---------+--------+---------------------+
+Kết quả trả về các hàng mà không ko có sẵn trong hàng 2
+(id 1 và id không có trong bảng 2 nên kết quả trả về 2 hàng đó)
+
+
+
+////--------------------------------------------------------------///////
+1) LEFT JOIN
+Trả về tất cả giá trị từ bảng bên trái, cộng với các giá trị được so khớp từ bảng bên phải hoặc NULL trong trường hợp không có so khớp nào.
+
+
+SELECT bang1.cot1, bang2.cot2...
+FROM bang1
+LEFT JOIN bang2
+ON bang1.field_chung = bang2.field_chung;
+
+SQL> SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     LEFT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID;
++----+----------+--------+----------------------+
+| ID | TEN      | SOTIEN | NGAY                	|
++----+----------+--------+----------------------+
+|  1 | Hoang    |   NULL | NULL                	|
+|  2 | Viet     |   280  | 2009-11-20 00:00:00 	|
+|  3 | Thanh    |   320  | 2009-10-08 00:00:00 	|
+|  3 | Thanh    |   250  | 2009-10-08 00:00:00 	|
+|  4 | Nhan     |   290  | 2008-05-20 00:00:00 	|
+|  5 | Huong    |   NULL | NULL                	|
++----+----------+--------+----------------------+
+
+2) RIGHT JOIN
+
+
+SQL> SELECT  ID, TEN, SOTIEN, NGAY
+     FROM SINHVIEN
+     RIGHT JOIN MUONSACH
+     ON SINHVIEN.ID = MUONSACH.SINHVIEN_ID;
++------+----------+--------+---------------------+
+| ID   | TEN     | SOTIEN | NGAY                 |
++------+----------+--------+---------------------+
+|    3 | Thanh  |   320 | 2009-10-08 00:00:00 	 |
+|    3 | Thanh  |   250 | 2009-10-08 00:00:00    |
+|    2 | Viet   |   280 | 2009-11-20 00:00:00    |
+|    4 | Nhan 	|   290 | 2008-05-20 00:00:00    |
++------+----------+--------+---------------------+
+
+3) Group By
+
+SELECT
+    c1, c2,..., cn
+FROM
+    table
+WHERE
+    where_conditions
+GROUP BY c1 , c2,...,cn;
+
+Thứ tự thực thi câu lệnh sẽ là: From -> Where -> Select -> Group By
+
+VD: gộp các nhóm tuổi và đếm từng độ tuổi có bao nhiêu người
+SELECT student_age, COUNT(student_name) AS total_students
+FROM students 
+    GROUP BY student_age
+
+Các hàm Count, Max, Sum sẽ có tác dụng đến các records trong nhóm ở câu lệnh group by.
+4) Having để thêm điều kiện cho Group By
+
+From -> Where -> Select -> Group By -> Having -> Order By -> Limit
+
+Đếm tổng số sinh viên theo từng lớp, và chỉ trả về lớp nào có từ 2 sinh viên trở đi.
+
+
+SELECT  class_id, COUNT(student_age) AS total_student
+FROM students 
+GROUP BY class_id
+HAVING total_student >= 2
+
+5) Subquery
+
+SELECT
+    lastName, firstName
+FROM
+    employees
+WHERE
+    officeCode IN (SELECT
+            officeCode
+        FROM
+            offices
+        WHERE
+            country = 'USA');
+            
+Mình sẽ tạo một sub query trả về một table ảo tên là (class_tmp) ,chứa id của lớp cần lấy, sau đó join với table Students là ra kết quả.
+SELECT * 
+FROM students 
+    JOIN   
+    (
+        SELECT * FROM class
+        WHERE class_id = 1
+    ) AS class_tmp ON class_tmp.class_id = students.class_id
+
+
+
+
+- Sử dụng primary and foreign keys
+- Sử dụng toán tử thiết lập (UNION, INTERSECT, EXCEPT)
+- Sử dụng DML cho SELECT, INSERT, UPDATE, DELETE
+- Viết các Query cơ bản với Where and optional khác (group by, order, having,...)
+- Viết các Query nâng cao: Join và subquery
+- Hiểu thế nào là Transaction và vai trò của Transaction
+- Sử dụng triggers and stored procedures
