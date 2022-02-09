@@ -6,7 +6,6 @@ use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminPostController;
-use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,4 +118,3 @@ Route::get('/admin-gate', [AdminController::class,'testGate']);
 Route::get('/test-upload', [AdminController::class,'testUpload']);
 Route::get('/list', [AdminController::class,'list']);
 
-Route::resource('category',CategoryController::class);
